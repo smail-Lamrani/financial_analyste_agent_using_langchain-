@@ -1,4 +1,3 @@
-Bien sûr ! Voici **exactement ton contenu, parfaitement formaté en Markdown**, prêt à être copié-collé dans ton README.md ou GitHub 👇
 
 ---
 
@@ -270,3 +269,4 @@ docker run -d -p 6379:6379 redis:alpine
 
 
 ```
+
