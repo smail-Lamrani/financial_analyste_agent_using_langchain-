@@ -1,3 +1,7 @@
+
+---
+
+```markdown
 # 🤖 Financial Assistant - AI-Powered Stock Analysis
 
 Un assistant financier intelligent utilisant l'IA pour fournir des analyses boursières **en temps réel** sans hallucinations.
@@ -8,17 +12,18 @@ Un assistant financier intelligent utilisant l'IA pour fournir des analyses bour
 
 ## ✨ Caractéristiques
 
-- 📊 **Données en temps réel** via yfinance API
-- 🔍 **Recherche web intelligente** avec DuckDuckGo
-- 🚫 **Zéro hallucination** grâce à l'architecture Tool-First
-- 🌍 **Multilingue** (français/anglais)
-- ⚡ **Cache intelligent** (Redis + in-memory fallback)
-- 💬 **Interface conversationnelle** avec mémoire
-- 🎯 **Données vérifiées** : prix, ratios, recommandations analystes
+- 📊 **Données en temps réel** via yfinance API  
+- 🔍 **Recherche web intelligente** avec DuckDuckGo  
+- 🚫 **Zéro hallucination** grâce à l'architecture Tool-First  
+- 🌍 **Multilingue** (français/anglais)  
+- ⚡ **Cache intelligent** (Redis + in-memory fallback)  
+- 💬 **Interface conversationnelle** avec mémoire  
+- 🎯 **Données vérifiées** : prix, ratios, recommandations analystes  
 
 ## 🏗️ Architecture
 
 ```
+
 ┌─────────────────────────────────────────────────────┐
 │           Tool-First Architecture                   │
 ├─────────────────────────────────────────────────────┤
@@ -34,22 +39,22 @@ Un assistant financier intelligent utilisant l'IA pour fournir des analyses bour
 │            LLM Synthesis (Mixtral-8x7B)            │
 │                  (optional formatting)              │
 └─────────────────────────────────────────────────────┘
-```
+
+````
 
 ### Composants Principaux
 
-- **SimpleFinancialAgent** : Appelle yfinance directement (pas de ReAct)
-- **MultiAgentOrchestrator** : Route les requêtes et orchestre les agents
-- **FinancialTools** : Wrapper pour yfinance (prix, fondamentaux, news)
-- **WebSearchTools** : Recherches DuckDuckGo (actualités récentes)
+- **SimpleFinancialAgent** : Appelle yfinance directement (pas de ReAct)  
+- **MultiAgentOrchestrator** : Route les requêtes et orchestre les agents  
+- **FinancialTools** : Wrapper pour yfinance (prix, fondamentaux, news)  
+- **WebSearchTools** : Recherches DuckDuckGo (actualités récentes)  
 
 ## 📦 Installation
 
 ### Prérequis
-
-- Python 3.13+
-- UV (gestionnaire de dépendances)
-- Compte HuggingFace (pour l'API)
+- Python 3.13+  
+- UV (gestionnaire de dépendances)  
+- Compte HuggingFace (pour l'API)  
 
 ### Étapes
 
@@ -57,9 +62,10 @@ Un assistant financier intelligent utilisant l'IA pour fournir des analyses bour
 ```bash
 git clone https://github.com/votre-repo/finance.git
 cd finance
-```
+````
 
 2. **Installer UV** (si nécessaire)
+
 ```bash
 # Windows
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
@@ -69,35 +75,24 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 3. **Créer l'environnement**
+
 ```bash
 uv sync
 ```
 
 4. **Configurer les variables d'environnement**
 
-Créer un fichier `.env` à la racine :
-```env
-# HuggingFace API Token (OBLIGATOIRE)
-HUGGINGFACEHUB_API_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxx
+Créer un fichier `.env` :
 
-# Redis (OPTIONNEL - utilise in-memory si absent)
+```env
+HUGGINGFACEHUB_API_TOKEN=hf_xxxxxxxxxx
 REDIS_HOST=localhost
 REDIS_PORT=6379
-REDIS_PASSWORD=
-
-# Modèles LLM (OPTIONNEL - valeurs par défaut)
 PRIMARY_MODEL=mistralai/Mistral-7B-Instruct-v0.3
 FALLBACK_MODEL=mistralai/Mixtral-8x7B-Instruct-v0.1
-
-# Cache TTL (OPTIONNEL)
 CACHE_TTL=3600
 NEWS_CACHE_TTL=300
 ```
-
-**Obtenir une clé HuggingFace :**
-1. Créer un compte sur [huggingface.co](https://huggingface.co)
-2. Aller dans Settings → Access Tokens
-3. Créer un nouveau token (Read access suffit)
 
 ## 🚀 Utilisation
 
@@ -107,7 +102,8 @@ NEWS_CACHE_TTL=300
 uv run main.py
 ```
 
-Ensuite, posez vos questions :
+Exemple :
+
 ```
 💬 You: What is the current stock price of NVIDIA?
 
@@ -119,7 +115,7 @@ Ensuite, posez vos questions :
 - Target Range: $140.0 - $352.0
 ```
 
-### Mode CLI (requête unique)
+### Mode CLI
 
 ```bash
 uv run main.py "Analyse AAPL avec fondamentaux"
@@ -127,21 +123,23 @@ uv run main.py "Analyse AAPL avec fondamentaux"
 
 ### Exemples de Questions
 
-**Données financières :**
+**Données financières**
+
 ```
 - What is the current stock price of Tesla?
 - Analyse financière de Microsoft avec les ratios
 - Recommandations des analystes pour NVIDIA
 ```
 
-**Actualités :**
+**Actualités**
+
 ```
 - Quelles sont les dernières news sur Apple?
 - What's happening with AMD stock today?
-- Contexte marché pour les actions tech
 ```
 
-**Analyses complètes :**
+**Analyses complètes**
+
 ```
 - Donne-moi une analyse complète de NVDA
 - Compare AAPL fundamentals with the market
@@ -155,14 +153,8 @@ from agents.orchestrator import MultiAgentOrchestrator
 
 async def main():
     orchestrator = MultiAgentOrchestrator()
-    
-    # Requête simple
-    response = await orchestrator.query(
-        "What is NVIDIA stock price?"
-    )
+    response = await orchestrator.query("What is NVIDIA stock price?")
     print(response)
-    
-    # Nettoyer le cache
     orchestrator.clear_memory()
 
 asyncio.run(main())
@@ -170,26 +162,16 @@ asyncio.run(main())
 
 ## 🔧 Configuration Avancée
 
-### Redis (Optionnel mais Recommandé)
-
-Pour un cache persistant :
+### Redis (Optionnel)
 
 ```bash
-# Docker
 docker run -d -p 6379:6379 redis:alpine
-
-# Ou avec docker-compose
-docker-compose up -d redis
 ```
 
 ### Modèles LLM
 
-Modifier dans `.env` :
 ```env
-# Mistral (rapide, bon pour données structurées)
 PRIMARY_MODEL=mistralai/Mistral-7B-Instruct-v0.3
-
-# Mixtral (meilleur pour synthèse, mais plus lent)
 FALLBACK_MODEL=mistralai/Mixtral-8x7B-Instruct-v0.1
 ```
 
@@ -198,108 +180,93 @@ FALLBACK_MODEL=mistralai/Mixtral-8x7B-Instruct-v0.1
 ```
 FINANCE/
 ├── agents/
-│   ├── base_agent.py           # Agent ReAct de base (legacy)
-│   ├── simple_financial_agent.py  # Tool-First agent (UTILISÉ)
-│   ├── financial_agent.py      # Agent financier avec tools
-│   ├── web_agent.py            # Agent recherche web
-│   └── orchestrator.py         # Orchestrateur principal
+│   ├── base_agent.py
+│   ├── simple_financial_agent.py
+│   ├── financial_agent.py
+│   ├── web_agent.py
+│   └── orchestrator.py
 ├── tools/
-│   ├── financial_tools.py      # Wrapper yfinance
-│   └── web_search_tools.py     # Wrapper DuckDuckGo
+│   ├── financial_tools.py
+│   └── web_search_tools.py
 ├── config/
-│   └── settings.py             # Configuration centralisée
+│   └── settings.py
 ├── memory/
-│   └── memory_manager.py       # Gestion mémoire conversationnelle
+│   └── memory_manager.py
 ├── cache/
-│   └── cache_manager.py        # Cache Redis/in-memory
-├── main.py                     # Point d'entrée CLI
-├── test.py                     # Tests de validation
-└── .env                        # Variables d'environnement
+│   └── cache_manager.py
+├── main.py
+├── test.py
+└── .env
 ```
 
 ## 🐛 Dépannage
 
-### Problème : `HUGGINGFACEHUB_API_TOKEN not found`
+### `HUGGINGFACEHUB_API_TOKEN not found`
 
-**Solution :**
 ```bash
-# Vérifier que .env existe
-ls .env
-
-# Ajouter le token
 echo "HUGGINGFACEHUB_API_TOKEN=hf_xxx" >> .env
 ```
 
-### Problème : `Redis not available`
+### `Redis not available`
 
-**Ce n'est pas grave !** Le système utilise un cache in-memory automatiquement.
+Le système utilise automatiquement un cache in-memory.
 
-Pour activer Redis :
+Activer Redis :
+
 ```bash
 docker run -d -p 6379:6379 redis:alpine
 ```
 
-### Problème : Réponses lentes (>30s)
-
-**Cause :** HuggingFace Inference API peut être lent aux heures de pointe.
-
-**Solutions :**
-1. Utiliser un modèle local (Ollama)
-2. Passer à l'API OpenAI/Anthropic
-3. Activer le cache Redis pour réutiliser les réponses
-
-### Problème : `StopIteration` dans les logs
-
-**Ce n'est pas bloquant !** Le système utilise un fallback propre qui retourne les données brutes (toujours correctes).
-
 ## 📊 Données Disponibles
 
-### Données Boursières (yfinance)
-- ✅ Prix en temps réel
-- ✅ Volume, capitalisation
-- ✅ Ratios financiers (P/E, PEG, Debt/Equity)
-- ✅ Marges (profit, opérationnelle)
-- ✅ Recommandations analystes
-- ✅ Targets de prix (min, max, moyenne)
+### Bourse (yfinance)
+
+* Prix temps réel
+* Ratios financiers
+* Recommandations analystes
+* Targets de prix
+* Marges, volumes, capitalisation
 
 ### Actualités (DuckDuckGo)
-- ✅ News récentes (24h-7j)
-- ✅ Sources fiables (CNBC, Bloomberg, Reuters...)
-- ✅ Citations avec liens
+
+* Sources fiables
+* Résumé + lien vers l’article
 
 ## 🚧 Limitations Connues
 
-- ❌ Pas de graphiques historiques
-- ❌ Pas de comparaisons multi-actions
-- ❌ Pas d'alertes en temps réel
-- ⚠️ Synthèse LLM parfois instable (fallback OK)
-- ⚠️ HuggingFace API peut être lent (10-30s)
+* Pas de graphiques historiques
+* Pas de comparaisons multi-actions
+* Pas d’alertes temps réel
+* HuggingFace parfois lent
 
 ## 🗺️ Roadmap
 
-- [ ] Tests automatisés (pytest)
-- [ ] API REST (FastAPI)
-- [ ] Dashboard (Streamlit/Gradio)
-- [ ] Graphiques historiques
-- [ ] Comparaisons multi-actions
-- [ ] Support crypto-monnaies
-- [ ] Alertes email/SMS
-
-
+* [ ] Tests automatisés
+* [ ] API REST
+* [ ] Dashboard Streamlit
+* [ ] Graphiques historiques
+* [ ] Support crypto
+* [ ] Alertes email/SMS
 
 ## 🙏 Remerciements
 
-- [yfinance](https://github.com/ranaroussi/yfinance) pour les données financières
-- [LangChain](https://langchain.com/) pour l'orchestration
-- [DuckDuckGo](https://duckduckgo.com/) pour les recherches
-- [HuggingFace](https://huggingface.co/) pour l'infrastructure LLM
+* yfinance
+* DuckDuckGo
+* LangChain
+* HuggingFace
 
 ## 📧 Contact
 
-Pour questions ou support : [ismaillamrani2003@gmail.com]
+[ismaillamrani2003@gmail.com](mailto:ismaillamrani2003@gmail.com)
 
 ---
 
-**⚠️ Disclaimer** : Cet outil est à usage éducatif uniquement. Ne constitue pas un conseil financier. Toujours faire ses propres recherches avant d'investir.
-#   f i n a n c i a l _ a n a l y s t e _ a g e n t _ u s i n g _ l a n g c h a i n -  
- 
+**⚠️ Disclaimer** : Cet outil est à usage éducatif uniquement. Ne constitue pas un conseil financier.
+
+```
+
+---
+
+
+```
+
