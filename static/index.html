@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant Financier IA</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="app-container-simple">
+
+        <!-- Header -->
+        <header class="app-header-simple">
+            <h1><i class="fa-solid fa-chart-line"></i> Assistant Financier IA</h1>
+            <p>Analyse • Comparaison • Graphiques • En temps réel</p>
+        </header>
+
+        <!-- Chatbot -->
+        <main class="chat-main">
+            <div class="chatbot-card">
+                <div class="chat-window" id="chatWindow">
+                    <div class="message bot-message">
+                        <strong>👋 Bonjour !</strong> Je suis votre assistant financier intelligent.
+                        <br><br>
+                        <strong>💡 Ce que je peux faire :</strong><br>
+                        • <strong>Analyse</strong> : "Analyse NVIDIA" ou "Prix de Tesla"<br>
+                        • <strong>Comparaison</strong> : "compare NVDA AMD INTC"<br>
+                        • <strong>Graphiques</strong> : "chart AAPL" ou "graph Tesla 6 mois"<br>
+                        • <strong>News</strong> : "Dernières infos sur Apple"
+                        <br><br>
+                        <em style="color: rgba(255,255,255,0.6);">Tapez votre question ci-dessous...</em>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Ex: Analyse NVDA, compare AMD NVDA, chart AAPL..."
+                        autofocus>
+                    <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer-simple">
+            <p>
+                <i class="fa-solid fa-shield-halved"></i>
+                Données en temps réel via yfinance •
+                Architecture Tool-First •
+                <a href="/docs" target="_blank">API Docs</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

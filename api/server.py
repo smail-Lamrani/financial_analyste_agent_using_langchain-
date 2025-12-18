@@ -39,6 +39,9 @@ import time
 
 from agents.orchestrator import MultiAgentOrchestrator
 from agents.simple_financial_agent import SimpleFinancialAgent
+from tools.chart_tools import ChartTools
+from fastapi.responses import FileResponse
+import os
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -65,6 +68,7 @@ app.add_middleware(
 # Initialize agents
 orchestrator = MultiAgentOrchestrator()
 financial_agent = SimpleFinancialAgent()
+chart_tools = ChartTools()
 
 # ============================================================================
 # Pydantic Models
@@ -323,6 +327,119 @@ async def clear_cache():
         raise HTTPException(
             status_code=500,
             detail=f"Failed to clear cache: {str(e)}"
+        )
+
+@app.get("/chart/{ticker}", tags=["Charts"])
+async def get_stock_chart(
+    ticker: str,
+    period: str = "1y",
+    show_ma: bool = True,
+    show_volume: bool = True
+):
+    """
+    Generate and serve a stock price chart.
+    
+    Creates a historical price chart with optional moving averages
+    and volume bars, then serves the PNG image.
+    
+    Args:
+        ticker: Stock ticker symbol (e.g., NVDA, AAPL)
+        period: Time period ("1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y")
+        show_ma: Show moving averages (MA50, MA200)
+        show_volume: Show volume bars
+    
+    Returns:
+        PNG image file
+    
+    Example:
+        ```
+        GET /chart/NVDA?period=6mo&show_ma=true
+        ```
+    """
+    try:
+        logger.info(f"Generating chart for {ticker} ({period})")
+        
+        # Generate chart
+        chart_path = chart_tools.plot_stock_history(
+            ticker=ticker,
+            period=period,
+            show_ma=show_ma,
+            show_volume=show_volume
+        )
+        
+        # Return image file
+        if os.path.exists(chart_path):
+            return FileResponse(
+                chart_path,
+                media_type="image/png",
+                filename=os.path.basename(chart_path)
+            )
+        else:
+            raise HTTPException(status_code=404, detail="Chart not found")
+            
+    except Exception as e:
+        logger.error(f"Chart generation error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate chart: {str(e)}"
+        )
+
+@app.post("/chart/compare", tags=["Charts"])
+async def get_comparison_chart(tickers: List[str], period: str = "1y", normalize: bool = True):
+    """
+    Generate and serve a stock comparison chart.
+    
+    Args:
+        tickers: List of 2-5 ticker symbols
+        period: Time period
+        normalize: Normalize to percentage change
+    
+    Returns:
+        PNG image file
+    
+    Example:
+        ```json
+        POST /chart/compare
+        {
+          "tickers": ["NVDA", "AMD", "INTC"],
+          "period": "1y",
+          "normalize": true
+        }
+        ```
+    """
+    try:
+        if not tickers or len(tickers) < 2:
+            raise HTTPException(status_code=400, detail="Need at least 2 tickers")
+        
+        if len(tickers) > 5:
+            raise HTTPException(status_code=400, detail="Maximum 5 tickers")
+        
+        logger.info(f"Generating comparison chart for {', '.join(tickers)}")
+        
+        # Generate chart
+        chart_path = chart_tools.plot_comparison_chart(
+            tickers=tickers,
+            period=period,
+            normalize=normalize
+        )
+        
+        # Return image
+        if os.path.exists(chart_path):
+            return FileResponse(
+                chart_path,
+                media_type="image/png",
+                filename=os.path.basename(chart_path)
+            )
+        else:
+            raise HTTPException(status_code=404, detail="Chart not found")
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Comparison chart error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate comparison chart: {str(e)}"
         )
 
 @app.get("/status", tags=["Health"])
